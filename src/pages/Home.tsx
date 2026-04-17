@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useDeferredValue, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Layers, Lightbulb, MonitorSmartphone, Code2, ArrowRight, Play, CheckCircle2 } from 'lucide-react';
+import { Layers, Lightbulb, MonitorSmartphone, Code2, ArrowRight, Play, CheckCircle2, Search, X } from 'lucide-react';
 import { getCourseData, getFirstLessonId } from '@/src/data/lessons';
 import { motion } from 'motion/react';
 import { useLanguage } from '@/src/i18n/LanguageContext';
@@ -11,6 +11,8 @@ export function Home() {
   const courseData = getCourseData(lang);
   const firstLessonId = getFirstLessonId();
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery.trim().toLowerCase());
   
   useEffect(() => {
     const stored = localStorage.getItem('flutterscope_completed');
@@ -23,6 +25,31 @@ export function Home() {
 
   const totalLessons = courseData.reduce((acc, section) => acc + section.lessons.length, 0);
   const progressPercent = Math.round((completedLessons.length / totalLessons) * 100);
+
+  const filteredCourseData = courseData
+    .map((section) => {
+      if (!deferredSearchQuery) {
+        return section;
+      }
+
+      const sectionMatches = `${section.title} ${section.description}`.toLowerCase().includes(deferredSearchQuery);
+      const lessons = sectionMatches
+        ? section.lessons
+        : section.lessons.filter((lesson) =>
+            `${lesson.title} ${lesson.description}`.toLowerCase().includes(deferredSearchQuery)
+          );
+
+      return lessons.length > 0 ? { ...section, lessons } : null;
+    })
+    .filter((section): section is typeof courseData[number] => section !== null);
+
+  const getSectionProgress = (lessonIds: string[]) => {
+    const completedCount = lessonIds.filter((lessonId) => completedLessons.includes(lessonId)).length;
+    const totalCount = lessonIds.length;
+    const percent = totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100);
+
+    return { completedCount, totalCount, percent };
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-slate-900 flex flex-col">
@@ -127,16 +154,56 @@ export function Home() {
                </div>
              </div>
            </div>
+
+           <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+             <div className="relative flex-1">
+               <Search className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 ${lang === 'ar' ? 'right-4' : 'left-4'}`} />
+               <input
+                 type="text"
+                 value={searchQuery}
+                 onChange={(event) => setSearchQuery(event.target.value)}
+                 placeholder={t('searchLessonsPlaceholder')}
+                 className={`w-full rounded-2xl border border-gray-200 bg-gray-50 py-3 text-sm outline-none transition focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50 ${lang === 'ar' ? 'pr-11 pl-11 text-right' : 'pl-11 pr-11'}`}
+               />
+               {searchQuery && (
+                 <button
+                   type="button"
+                   onClick={() => setSearchQuery('')}
+                   className={`absolute top-1/2 -translate-y-1/2 rounded-md p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 ${lang === 'ar' ? 'left-3' : 'right-3'}`}
+                 >
+                   <X className="w-4 h-4" />
+                 </button>
+               )}
+             </div>
+             <div className="text-sm font-medium text-gray-500">
+               {filteredCourseData.reduce((count, section) => count + section.lessons.length, 0)} {t('searchResultsLabel')}
+             </div>
+           </div>
            
            <div className="space-y-8 relative z-10">
-             {courseData.map((section, idx) => (
+             {filteredCourseData.length > 0 ? filteredCourseData.map((section) => {
+               const progress = getSectionProgress(section.lessons.map((lesson) => lesson.id));
+
+               return (
                <div key={section.id} className={`relative pb-2 border-gray-100 ${lang === 'ar' ? 'pr-6 border-r-2' : 'pl-6 border-l-2'}`}>
                  <div className={`absolute top-1 w-4 h-4 rounded-full bg-blue-100 border-2 border-white flex items-center justify-center ${lang === 'ar' ? '-right-[9px]' : '-left-[9px]'}`}>
                     <div className="w-2 h-2 rounded-full bg-blue-500" />
                  </div>
-                 <h4 className="font-bold text-lg text-gray-900 mb-1">{section.title}</h4>
-                 <p className="text-gray-500 text-sm mb-4">{section.description}</p>
-                 <div className="flex flex-wrap gap-2">
+                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                   <div>
+                     <h4 className="font-bold text-lg text-gray-900 mb-1">{section.title}</h4>
+                     <p className="text-gray-500 text-sm">{section.description}</p>
+                   </div>
+                   <div className={`min-w-[180px] ${lang === 'ar' ? 'sm:text-left' : 'sm:text-right'}`}>
+                     <div className="text-xs font-semibold text-gray-500 mb-2">
+                       {t('sectionProgressLabel')}: {progress.completedCount}/{progress.totalCount}
+                     </div>
+                     <div className="h-2 rounded-full bg-gray-100 overflow-hidden" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+                       <div className="h-full bg-blue-500 transition-all duration-500" style={{ width: `${progress.percent}%` }} />
+                     </div>
+                   </div>
+                 </div>
+                 <div className="flex flex-wrap gap-2 mt-4">
                    {section.lessons.map(lesson => {
                      const isCompleted = completedLessons.includes(lesson.id);
                      return (
@@ -154,7 +221,12 @@ export function Home() {
                    })}
                  </div>
                </div>
-             ))}
+             );
+             }) : (
+               <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-8 text-center text-gray-500">
+                 {t('noLessonsFound')}
+               </div>
+             )}
            </div>
         </section>
       </main>
@@ -162,7 +234,17 @@ export function Home() {
   );
 }
 
-function FeatureCard({ icon: Icon, title, desc, color }: any) {
+function FeatureCard({
+  icon: Icon,
+  title,
+  desc,
+  color,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  color: string;
+}) {
   return (
     <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 ${color}`}>
