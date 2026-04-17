@@ -19,7 +19,6 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
   const [allCorrect, setAllCorrect] = useState(false);
 
   useEffect(() => {
-    // Reset state when questions change
     setCurrentQ(0);
     setSelected(null);
     setWrongAttempts([]);
@@ -33,7 +32,7 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
 
   const handleNext = () => {
     if (currentQ < questions.length - 1) {
-      setCurrentQ(c => c + 1);
+      setCurrentQ((currentIndex) => currentIndex + 1);
       setSelected(null);
       setWrongAttempts([]);
     } else {
@@ -42,13 +41,12 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
     }
   };
 
-  const handleOptionClick = (i: number) => {
-    // If they already got it right, don't let them click again
+  const handleOptionClick = (index: number) => {
     if (selected === q.correctAnswerIndex) return;
 
-    setSelected(i);
-    if (i !== q.correctAnswerIndex && !wrongAttempts.includes(i)) {
-      setWrongAttempts(prev => [...prev, i]);
+    setSelected(index);
+    if (index !== q.correctAnswerIndex && !wrongAttempts.includes(index)) {
+      setWrongAttempts((previousAttempts) => [...previousAttempts, index]);
     }
   };
 
@@ -56,19 +54,19 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
 
   if (allCorrect) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-8 h-8 text-green-600" />
+      <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-500/15">
+          <CheckCircle2 className="h-8 w-8 text-green-600" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('lessonComplete')}</h3>
-        <p className="text-gray-500 mb-8">{t('lessonCompleteDesc')}</p>
-        
+        <h3 className="mb-2 text-2xl font-bold text-gray-900 dark:text-slate-100">{t('lessonComplete')}</h3>
+        <p className="mb-8 text-gray-500 dark:text-slate-400">{t('lessonCompleteDesc')}</p>
+
         {hasNextLesson && onNextLesson && (
           <button
             onClick={onNextLesson}
-            className={`px-8 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition flex items-center gap-2 mx-auto shadow-md ${lang === 'ar' ? 'flex-row-reverse' : ''}`}
+            className={`mx-auto flex items-center gap-2 rounded-xl bg-blue-600 px-8 py-3 font-medium text-white shadow-md transition hover:bg-blue-700 ${lang === 'ar' ? 'flex-row-reverse' : ''}`}
           >
-            {t('continueToNext')} <RTLArrow className="w-5 h-5" />
+            {t('continueToNext')} <RTLArrow className="h-5 w-5" />
           </button>
         )}
       </div>
@@ -76,41 +74,40 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm">
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{t('checkUnderstanding')}</h3>
-      <p className="text-sm font-medium text-gray-500 mb-6">
+    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:p-8">
+      <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-slate-100">{t('checkUnderstanding')}</h3>
+      <p className="mb-6 text-sm font-medium text-gray-500 dark:text-slate-400">
         {t('question')} {currentQ + 1} {t('ofText')} {questions.length}
       </p>
 
-      <div className="mb-6 text-lg text-gray-800">
-        {q.question}
-      </div>
+      <div className="mb-6 text-lg text-gray-800 dark:text-slate-200">{q.question}</div>
 
       <div className="space-y-3">
-        {q.options.map((opt, i) => {
-          const isThisCorrect = i === q.correctAnswerIndex;
-          const isWrongAttempt = wrongAttempts.includes(i);
+        {q.options.map((option, index) => {
+          const isThisCorrect = index === q.correctAnswerIndex;
+          const isWrongAttempt = wrongAttempts.includes(index);
           const solved = selected === q.correctAnswerIndex;
-          
-          let btnStyle = "border-gray-200 hover:border-blue-400 hover:bg-blue-50 opacity-100 cursor-pointer";
-          
+
+          let buttonStyle =
+            'border-gray-200 hover:border-blue-400 hover:bg-blue-50 opacity-100 cursor-pointer dark:border-slate-700 dark:bg-slate-950/40 dark:hover:border-blue-500 dark:hover:bg-blue-500/10';
+
           if (solved) {
             if (isThisCorrect) {
-              btnStyle = "border-green-500 bg-green-50 text-green-900";
+              buttonStyle = 'border-green-500 bg-green-50 text-green-900 dark:bg-green-500/10 dark:text-green-200';
             } else {
-              btnStyle = "border-gray-100 opacity-50 cursor-default";
+              buttonStyle = 'border-gray-100 opacity-50 cursor-default dark:border-slate-800';
             }
           } else if (isWrongAttempt) {
-            btnStyle = "border-red-500 bg-red-50 text-red-900";
+            buttonStyle = 'border-red-500 bg-red-50 text-red-900 dark:bg-red-500/10 dark:text-red-200';
           }
 
           return (
             <button
-              key={i}
-              onClick={() => handleOptionClick(i)}
-              className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${btnStyle} ${lang === 'ar' ? 'text-right' : ''}`}
+              key={index}
+              onClick={() => handleOptionClick(index)}
+              className={`w-full rounded-xl border-2 p-4 text-left transition-all duration-200 ${buttonStyle} ${lang === 'ar' ? 'text-right' : ''}`}
             >
-              {opt}
+              {option}
             </button>
           );
         })}
@@ -118,19 +115,25 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
 
       <AnimatePresence mode="popLayout">
         {selected !== null && (
-          <motion.div 
+          <motion.div
             key={isCorrect ? 'correct' : 'wrong'}
             initial={{ opacity: 0, y: 10, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className={`mt-6 p-4 rounded-xl flex items-start gap-3 overflow-hidden ${
-              isCorrect ? 'bg-green-100 text-green-900' : 'bg-red-50 border border-red-100 text-red-900'
+            className={`mt-6 flex items-start gap-3 overflow-hidden rounded-xl p-4 ${
+              isCorrect
+                ? 'bg-green-100 text-green-900 dark:bg-green-500/10 dark:text-green-200'
+                : 'border border-red-100 bg-red-50 text-red-900 dark:border-red-900/40 dark:bg-red-500/10 dark:text-red-200'
             }`}
           >
-            {isCorrect ? <CheckCircle2 className="w-6 h-6 shrink-0 text-green-600 mt-0.5" /> : <XCircle className="w-6 h-6 shrink-0 text-red-500 mt-0.5" />}
+            {isCorrect ? (
+              <CheckCircle2 className="mt-0.5 h-6 w-6 shrink-0 text-green-600" />
+            ) : (
+              <XCircle className="mt-0.5 h-6 w-6 shrink-0 text-red-500" />
+            )}
             <div>
-              <p className="font-bold mb-1">{isCorrect ? t('correct') : t('wrongTryAgain')}</p>
-              <p className="text-sm opacity-90 leading-relaxed">{q.explanation}</p>
+              <p className="mb-1 font-bold">{isCorrect ? t('correct') : t('wrongTryAgain')}</p>
+              <p className="text-sm leading-relaxed opacity-90">{q.explanation}</p>
             </div>
           </motion.div>
         )}
@@ -138,16 +141,16 @@ export function Quiz({ questions, onComplete, onNextLesson, hasNextLesson }: Qui
 
       <AnimatePresence>
         {isCorrect && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`mt-8 pt-6 border-t flex ${lang === 'ar' ? 'justify-start' : 'justify-end'}`}
+            className={`mt-8 flex border-t pt-6 dark:border-slate-800 ${lang === 'ar' ? 'justify-start' : 'justify-end'}`}
           >
             <button
               onClick={handleNext}
-              className={`px-6 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition flex items-center gap-2 ${lang === 'ar' ? 'flex-row-reverse' : ''}`}
+              className={`flex items-center gap-2 rounded-lg bg-gray-900 px-6 py-2.5 font-medium text-white transition hover:bg-gray-800 dark:bg-slate-100 dark:text-slate-950 dark:hover:bg-white ${lang === 'ar' ? 'flex-row-reverse' : ''}`}
             >
-              {currentQ < questions.length - 1 ? t('nextQuestion') : t('finishLesson')} <RTLArrow className="w-4 h-4" />
+              {currentQ < questions.length - 1 ? t('nextQuestion') : t('finishLesson')} <RTLArrow className="h-4 w-4" />
             </button>
           </motion.div>
         )}
