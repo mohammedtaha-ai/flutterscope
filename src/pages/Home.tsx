@@ -85,11 +85,11 @@ export function Home() {
               <X className="h-5 w-5" />
             </button>
 
-            <div className="bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 px-8 py-8 text-white">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em]">FlutterScope</p>
-              <h2 className="text-3xl font-black md:text-4xl">Welcome to FlutterScope</h2>
+            <div className="bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 px-5 py-6 text-center text-white sm:px-8 sm:py-8">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] sm:text-sm sm:tracking-[0.3em]">FlutterScope</p>
+              <h2 className="mx-auto max-w-[12ch] break-words text-2xl font-black leading-tight sm:max-w-none sm:text-3xl md:text-4xl">Welcome to FlutterScope</h2>
               <p className="mt-2 text-lg font-medium text-white/90">مرحبًا بك في FlutterScope</p>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/90 md:text-base">
+              <p className="mt-4 break-words text-sm leading-7 text-white/90 sm:mx-auto sm:max-w-2xl md:text-base">
                 Learn Flutter visually through interactive lessons, code challenges, and live previews.
                 <br />
                 تعلّم Flutter بصريًا من خلال الدروس التفاعلية، تحديات الكود، والمعاينات الحية.
@@ -97,8 +97,8 @@ export function Home() {
             </div>
 
             <div className="overflow-y-auto">
-              <div className="grid gap-6 px-8 py-8 md:grid-cols-2">
-              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-950/60">
+              <div className="grid gap-4 px-5 py-6 sm:gap-6 sm:px-8 sm:py-8 md:grid-cols-2">
+              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="ltr">
                 <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-slate-100">English Guide</h3>
                 <ul className="space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                   <li>1. Start from the first lesson and move section by section.</li>
@@ -108,7 +108,7 @@ export function Home() {
                 </ul>
               </section>
 
-              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-right dark:border-slate-700 dark:bg-slate-950/60" dir="rtl">
+              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-right dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="rtl">
                 <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-slate-100">دليل سريع بالعربية</h3>
                 <ul className="space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                   <li>١. ابدأ من أول درس وامشِ بالتدرج قسمًا بعد قسم.</li>
@@ -119,7 +119,7 @@ export function Home() {
               </section>
             </div>
 
-              <div className="flex flex-col gap-4 border-t border-slate-200 px-8 py-6 dark:border-slate-800 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-4 border-t border-slate-200 px-5 py-5 text-center dark:border-slate-800 sm:px-8 sm:py-6 md:flex-row md:items-center md:justify-between md:text-left">
               <div>
                 <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">Developed by Mohammed Taha</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">تم تطوير هذه التجربة بواسطة Mohammed Taha</p>
@@ -129,14 +129,14 @@ export function Home() {
                 <button
                   type="button"
                   onClick={dismissWelcomePanel}
-                  className="rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                  className="w-full rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800 sm:w-auto"
                 >
                   Continue / متابعة
                 </button>
                 <Link
                   to={`/lesson/${firstLessonId}`}
                   onClick={dismissWelcomePanel}
-                  className="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-700"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-blue-700 sm:w-auto"
                 >
                   Start Learning / ابدأ التعلّم
                 </Link>
