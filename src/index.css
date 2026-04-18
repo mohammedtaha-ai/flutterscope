@@ -8,6 +8,11 @@ body,
   min-height: 100%;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background: #f8fafc;
   color: #0f172a;

@@ -72,10 +72,10 @@ export function Home() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="flex min-h-screen flex-col overflow-x-hidden bg-gray-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       {showWelcomePanel && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/70 px-4 py-6 backdrop-blur-sm">
-          <div className="relative mx-auto flex w-full max-w-4xl max-h-[calc(100vh-3rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 z-50 overflow-x-hidden overflow-y-auto bg-slate-950/70 px-4 py-6 backdrop-blur-sm">
+          <div className="relative mx-auto flex w-full min-w-0 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-3rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100 md:max-w-4xl">
             <button
               type="button"
               onClick={dismissWelcomePanel}
@@ -90,16 +90,16 @@ export function Home() {
               <h2 dir="ltr" className="mx-auto text-2xl font-black leading-tight sm:text-3xl md:text-4xl">Welcome to FlutterScope</h2>
               <p dir="rtl" className="mt-2 text-lg font-medium text-white/90">مرحبًا بك في FlutterScope</p>
               <div className="mt-4 flex flex-col gap-2 text-sm leading-7 text-white/90 sm:mx-auto sm:max-w-2xl md:text-base">
-                <p dir="ltr">Learn Flutter visually through interactive lessons, code challenges, and live previews.</p>
+                <p dir="ltr" className="mx-auto max-w-md text-center">Learn Flutter visually through interactive lessons, code challenges, and live previews.</p>
                 <p dir="rtl">تعلّم Flutter بصريًا من خلال الدروس التفاعلية، تحديات الكود، والمعاينات الحية.</p>
               </div>
             </div>
 
             <div className="overflow-y-auto">
               <div className="grid gap-4 px-5 py-6 sm:gap-6 sm:px-8 sm:py-8 md:grid-cols-2">
-              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="ltr">
+              <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="ltr">
                 <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-slate-100">English Guide</h3>
-                <ul className="space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                <ul className="space-y-3 break-words text-sm leading-7 text-slate-600 dark:text-slate-300">
                   <li>1. Start from the first lesson and move section by section.</li>
                   <li>2. Switch between Arabic and English anytime from the top bar.</li>
                   <li>3. Open each interactive preview and try the code challenge yourself.</li>
@@ -107,9 +107,9 @@ export function Home() {
                 </ul>
               </section>
 
-              <section className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-right dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="rtl">
+              <section className="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-5 text-right dark:border-slate-700 dark:bg-slate-950/60 sm:p-6" dir="rtl">
                 <h3 className="mb-4 text-lg font-bold text-slate-900 dark:text-slate-100">دليل سريع بالعربية</h3>
-                <ul className="space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                <ul className="space-y-3 break-words text-sm leading-7 text-slate-600 dark:text-slate-300">
                   <li>١. ابدأ من أول درس وامشِ بالتدرج قسمًا بعد قسم.</li>
                   <li>٢. يمكنك التبديل بين العربية والإنجليزية من الشريط العلوي في أي وقت.</li>
                   <li>٣. افتح المعاينات التفاعلية وجرّب تحديات الكود بنفسك.</li>
@@ -146,8 +146,8 @@ export function Home() {
         </div>
       )}
 
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-6 py-5 dark:border-slate-800 dark:bg-slate-950/90 lg:px-12">
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-10 flex flex-col gap-4 border-b bg-white px-4 py-4 dark:border-slate-800 dark:bg-slate-950/90 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-12">
+        <div className="flex items-center justify-center gap-3 sm:justify-start">
           <div className="rounded-lg bg-blue-500 p-2">
             <MonitorSmartphone className="h-6 w-6 text-white" />
           </div>
@@ -155,16 +155,16 @@ export function Home() {
             FlutterScope
           </h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex w-full flex-wrap items-center justify-center gap-3 sm:w-auto sm:flex-nowrap sm:justify-end sm:gap-4">
           <ThemeToggle />
           <LanguageSwitcher />
           <button
             type="button"
             onClick={() => setShowWelcomePanel(true)}
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 sm:px-4"
           >
             <Info className="h-4 w-4" />
-            <span>{lang === 'ar' ? 'حول المشروع' : 'About'}</span>
+            <span>{lang === 'ar' ? 'حول' : 'About'}</span>
           </button>
           <Link
             to={`/lesson/${firstLessonId}`}
@@ -175,7 +175,7 @@ export function Home() {
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12 lg:py-20">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-12 sm:px-6 lg:py-20">
         <section className="mx-auto mb-20 max-w-3xl text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
