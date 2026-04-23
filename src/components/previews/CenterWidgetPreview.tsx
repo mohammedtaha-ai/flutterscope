@@ -31,15 +31,24 @@ class MyCenterApp extends StatelessWidget {
           <h3 className="font-bold text-lg mb-4">{t('interactiveControls')}</h3>
           
           <div className="space-y-4">
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <div className={`w-12 h-6 rounded-full p-1 transition-colors ${isCentered ? 'bg-blue-600' : 'bg-gray-300'}`}>
+            <button
+              type="button"
+              onClick={() => setIsCentered((current) => !current)}
+              aria-pressed={isCentered}
+              aria-label={isCentered ? t('withCenter') : t('withoutCenter')}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <div
+                className={`w-12 h-6 rounded-full p-1 transition-colors ${isCentered ? 'bg-blue-600' : 'bg-gray-300'}`}
+                aria-hidden="true"
+              >
                 <div className={`w-4 h-4 bg-white rounded-full transition-transform ${isCentered ? 'translate-x-6' : 'translate-x-0'}`} />
               </div>
               <span className="text-sm font-bold text-gray-800">
-                {isCentered ? "With Center Widget" : "Without Center Widget"}
+                {isCentered ? t('withCenter') : t('withoutCenter')}
               </span>
-            </label>
-            <p className="text-xs text-gray-500">Toggle this to physically wrap the Text widget inside a Center widget.</p>
+            </button>
+            <p className="text-xs text-gray-500">{t('toggleCenter')}</p>
           </div>
         </div>
 
