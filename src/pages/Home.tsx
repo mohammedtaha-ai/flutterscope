@@ -6,42 +6,21 @@ import { motion } from 'motion/react';
 import { useLanguage } from '@/src/i18n/LanguageContext';
 import { LanguageSwitcher } from '@/src/i18n/LanguageSwitcher';
 import { ThemeToggle } from '@/src/components/ThemeToggle';
-
-const WELCOME_STORAGE_KEY = 'flutterscope_welcome_seen';
+import { useProgress } from '@/src/hooks/useProgress';
+import { useWelcomePanel } from '@/src/hooks/useWelcomePanel';
 
 export function Home() {
   const { lang, t } = useLanguage();
   const courseData = getCourseData(lang);
   const firstLessonId = getFirstLessonId();
-  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const { completedLessons } = useProgress();
+  const { showWelcomePanel, dismissWelcomePanel, openWelcomePanel } = useWelcomePanel();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showWelcomePanel, setShowWelcomePanel] = useState(false);
   const deferredSearchQuery = useDeferredValue(searchQuery.trim().toLowerCase());
-
-  useEffect(() => {
-    const stored = localStorage.getItem('flutterscope_completed');
-    if (stored) {
-      try {
-        setCompletedLessons(JSON.parse(stored));
-      } catch (e) {}
-    }
-  }, []);
 
   useEffect(() => {
     document.title = lang === 'ar' ? 'FlutterScope | تعلّم فلاتر' : 'FlutterScope | Learn Flutter';
   }, [lang]);
-
-  useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem(WELCOME_STORAGE_KEY);
-    if (!hasSeenWelcome) {
-      setShowWelcomePanel(true);
-    }
-  }, []);
-
-  const dismissWelcomePanel = () => {
-    localStorage.setItem(WELCOME_STORAGE_KEY, 'true');
-    setShowWelcomePanel(false);
-  };
 
   const totalLessons = courseData.reduce((acc, section) => acc + section.lessons.length, 0);
   const progressPercent = Math.round((completedLessons.length / totalLessons) * 100);
@@ -160,7 +139,7 @@ export function Home() {
           <LanguageSwitcher />
           <button
             type="button"
-            onClick={() => setShowWelcomePanel(true)}
+            onClick={() => openWelcomePanel()}
             className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 sm:px-4"
           >
             <Info className="h-4 w-4" />

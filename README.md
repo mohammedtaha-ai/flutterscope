@@ -5,7 +5,7 @@
 **Learn Flutter visually through interactive lessons, code challenges, and live previews.** <br>
 *تعلّم Flutter بصريًا من خلال الدروس التفاعلية، تحديات الكود، والمعاينات الحية.*
 
-[![React](https://img.shields.io/badge/React-18.x-blue?style=flat-square&logo=react)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-19.x-blue?style=flat-square&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-purple?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
@@ -34,7 +34,7 @@
 * 📱 **Fully Responsive:** Beautifully crafted layout for desktops, tablets, and mobile devices.
 
 ### 🛠️ Tech Stack
-* **Frontend Framework:** React 18
+* **Frontend Framework:** React 19
 * **Build Tool:** Vite
 * **Language:** TypeScript
 * **Styling:** Tailwind CSS
@@ -79,7 +79,7 @@
 * 📱 **متجاوب 100%:** تصميم يعمل بكفاءة وشكل ممتاز على الهواتف والأجهزة اللوحية وأجهزة الكمبيوتر.
 
 ### 🛠️ التقنيات المستخدمة
-* **إطار العمل:** React 18
+* **إطار العمل:** React 19
 * **أداة البناء (Build Tool):** Vite
 * **اللغة الأساسية:** TypeScript
 * **تصميم الواجهات:** Tailwind CSS

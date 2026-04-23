@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext';
 import { ThemeProvider } from './theme/ThemeContext';
 
@@ -20,7 +20,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <HashRouter>
+        <BrowserRouter>
           <Suspense fallback={<AppFallback />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -28,7 +28,7 @@ export default function App() {
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
-        </HashRouter>
+        </BrowserRouter>
       </LanguageProvider>
     </ThemeProvider>
   );

@@ -21,6 +21,7 @@ import {
 import { useLanguage } from '@/src/i18n/LanguageContext';
 import { LanguageSwitcher } from '@/src/i18n/LanguageSwitcher';
 import { ThemeToggle } from '@/src/components/ThemeToggle';
+import { useProgress } from '@/src/hooks/useProgress';
 
 export function LessonPage() {
   const { id } = useParams<{ id: string }>();
@@ -37,18 +38,9 @@ export function LessonPage() {
     const stored = window.localStorage.getItem('flutterscope_sidebar_visible');
     return stored === null ? true : stored === 'true';
   });
-  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const { completedLessons, markCompleted } = useProgress();
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery.trim().toLowerCase());
-
-  useEffect(() => {
-    const stored = localStorage.getItem('flutterscope_completed');
-    if (stored) {
-      try {
-        setCompletedLessons(JSON.parse(stored));
-      } catch (e) {}
-    }
-  }, []);
 
   useEffect(() => {
     window.localStorage.setItem('flutterscope_sidebar_visible', String(desktopSidebarVisible));
@@ -65,15 +57,6 @@ export function LessonPage() {
         ? `FlutterScope | ${lessonData.lesson.title}`
         : `FlutterScope | ${lessonData.lesson.title}`;
   }, [lang, lessonData]);
-
-  const markCompleted = (lessonId: string) => {
-    setCompletedLessons((previousLessons) => {
-      if (previousLessons.includes(lessonId)) return previousLessons;
-      const nextLessons = [...previousLessons, lessonId];
-      localStorage.setItem('flutterscope_completed', JSON.stringify(nextLessons));
-      return nextLessons;
-    });
-  };
 
   if (!lessonData) {
     return (
